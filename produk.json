@@ -2,15 +2,6 @@
   "contoh": false,
   "barang": [
     {
-      "nomor": 1,
-      "nama": "Mils Magnetic Slim Case",
-      "link": "https://s.shopee.co.id/3B8keGBCBX",
-      "foto": "foto/1-1793905353318.jpg",
-      "kategori": "Ipad Case",
-      "harga": "",
-      "catatan": ""
-    },
-    {
       "nomor": 2,
       "nama": "Hijab Voal (Desert Sage)",
       "link": "https://s.shopee.co.id/6ficq9ERxm",
@@ -27,6 +18,18 @@
       "nama": "Moissanite Ring in gold",
       "link": "https://s.shopee.co.id/7KyJk1UCn7",
       "foto": "foto/3-1793907528780.jpg",
+      "video": "",
+      "kategori": "",
+      "harga": "",
+      "catatan": "",
+      "favorit": false,
+      "sembunyi": false
+    },
+    {
+      "nomor": 1,
+      "nama": "Mils Magnetic Slim Case",
+      "link": "https://s.shopee.co.id/3B8keGBCBX",
+      "foto": "foto/1-1793905353318.jpg",
       "video": "",
       "kategori": "",
       "harga": "",
