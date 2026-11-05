@@ -1,0 +1,512 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Kelola Spill">
+<link rel="apple-touch-icon" href="ikon.png">
+<title>Kelola sabilaamarav</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,400..600&family=Albert+Sans:wght@400;500&display=swap">
+<style>
+/* Layout: satu formulir besar untuk jempol. Di iPad, daftar barang pindah ke samping. */
+:root {
+  --kertas: #f3f5f0; --tinta: #1f3a32; --redup: #5b6e66; --garis: #c9d2c8;
+  --bingkai: #e2e8dc; --tinta-foto: #1f3a32; --sorot: #f0e7a8; --bahaya: #a3271b;
+  --serif: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
+  --sans: "Albert Sans", -apple-system, "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --kertas: #15231f; --tinta: #e8eee5; --redup: #a3b3aa; --garis: #38493f;
+    --sorot: #4c4a26; --bahaya: #ff9d90; color-scheme: dark;
+  }
+}
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--kertas); color: var(--tinta); font: 400 1rem/1.5 var(--sans); }
+:focus-visible { outline: 2px solid var(--tinta); outline-offset: 2px; }
+
+.halaman {
+  max-width: 60rem; margin-inline: auto;
+  padding-block: calc(1.25rem + env(safe-area-inset-top, 0px)) calc(2.5rem + env(safe-area-inset-bottom, 0px));
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.kepala { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
+h1 { margin: 0; font: 500 1.5rem/1.2 var(--serif); }
+h2 { margin: 0 0 .5rem; font: 500 1.25rem/1.2 var(--serif); }
+.kepala a { color: var(--redup); }
+
+.susunan { display: grid; gap: 2.5rem; margin-top: 1.25rem; }
+@media (min-width: 48rem) { .susunan { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 3rem; align-items: start; } }
+
+form { display: grid; gap: 1rem; }
+label, .judul-kolom { display: block; font-weight: 500; margin-bottom: .25rem; }
+.opsional { color: var(--redup); font-weight: 400; }
+/* 16px mencegah Safari iOS memperbesar halaman saat kolom diketuk. */
+input[type="text"], input[type="password"], textarea {
+  width: 100%; min-height: 48px; padding: .6rem .75rem;
+  border: 1.5px solid var(--garis); border-radius: 0; background: transparent; color: inherit;
+  font: 400 16px/1.4 var(--sans); -webkit-appearance: none; appearance: none;
+}
+input:focus, textarea:focus { outline: none; border-color: var(--tinta); }
+.dua { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: .75rem; }
+.gabung { display: flex; gap: .5rem; }
+.gabung input { flex: 1; min-width: 0; }
+
+.pilih-foto {
+  position: relative; display: block; width: min(100%, 15rem); aspect-ratio: 4 / 5; margin: 0;
+  background: var(--bingkai); color: var(--tinta-foto); overflow: hidden; cursor: pointer; isolation: isolate;
+}
+.pilih-foto input { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
+.pilih-foto:focus-within { outline: 2px solid var(--tinta); outline-offset: 2px; }
+.pilih-foto img { display: block; width: 100%; height: 100%; object-fit: cover; mix-blend-mode: multiply; }
+.ajakan { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-weight: 500; text-decoration: underline; text-underline-offset: .25em; pointer-events: none; }
+
+button { min-height: 48px; padding: 0 1rem; border: 1.5px solid var(--tinta); border-radius: 0; background: transparent; color: var(--tinta); font: 500 1rem/1 var(--sans); cursor: pointer; -webkit-tap-highlight-color: transparent; }
+button[disabled] { opacity: .55; }
+.utama { background: var(--tinta); color: var(--kertas); }
+.bahaya { border-color: var(--bahaya); color: var(--bahaya); }
+.tombol { display: flex; flex-wrap: wrap; gap: .5rem; }
+.tombol .utama { flex: 1 1 100%; }
+.tombol button:not(.utama) { flex: 1 1 8rem; }
+
+.status { margin: 0; padding: .6rem .75rem; background: var(--sorot); }
+.status.gagal { background: transparent; border: 1.5px solid var(--bahaya); color: var(--bahaya); }
+
+.daftar { list-style: none; margin: 0; padding: 0; }
+.daftar button { display: grid; grid-template-columns: 3rem 2.75rem minmax(0, 1fr); align-items: center; gap: .6rem; width: 100%; min-height: 60px; padding: .3rem 0; border: 0; border-top: 1px solid var(--garis); text-align: left; font-weight: 400; line-height: 1.3; }
+.mini { display: block; width: 3rem; aspect-ratio: 4 / 5; background: var(--bingkai); isolation: isolate; overflow: hidden; }
+.mini img { display: block; width: 100%; height: 100%; object-fit: cover; mix-blend-mode: multiply; }
+.daftar b { font: 400 1.35rem/1 var(--serif); font-variant-numeric: lining-nums; }
+.kosong { color: var(--redup); margin: 0; }
+</style>
+</head>
+<body>
+<div class="halaman">
+  <header class="kepala">
+    <h1>Kelola sabilaamarav</h1>
+    <a href="./" target="_blank" rel="noopener">Lihat website</a>
+  </header>
+
+  <section id="layar-kunci" hidden style="margin-top:1.5rem">
+    <form id="form-kunci">
+      <div>
+        <label for="kunci">Kunci website</label>
+        <input id="kunci" type="password" autocomplete="off" autocapitalize="off" spellcheck="false">
+      </div>
+      <button class="utama" type="submit">Masuk</button>
+      <p class="status gagal" id="status-kunci" role="alert" hidden></p>
+    </form>
+  </section>
+
+  <div class="susunan" id="layar-utama" hidden>
+    <section aria-labelledby="judul-form">
+      <h2 id="judul-form">Tambah barang</h2>
+      <form id="form" novalidate>
+        <div>
+          <span class="judul-kolom">Foto</span>
+          <label class="pilih-foto" for="foto" style="margin:0;font-weight:400">
+            <img id="pratinjau" alt="Foto barang" hidden>
+            <span class="ajakan" id="ajakan">Pilih foto</span>
+            <input id="foto" type="file" accept="image/*">
+          </label>
+        </div>
+        <div>
+          <label for="link">Link affiliate Shopee</label>
+          <div class="gabung">
+            <input id="link" type="text" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="https://s.shopee.co.id/…">
+            <button type="button" id="tempel">Tempel</button>
+          </div>
+        </div>
+        <div>
+          <label for="nama">Nama barang</label>
+          <input id="nama" type="text">
+        </div>
+        <div class="dua">
+          <div>
+            <label for="nomor">Nomor</label>
+            <input id="nomor" type="text" inputmode="numeric">
+          </div>
+          <div>
+            <label for="harga">Harga <span class="opsional">(boleh kosong)</span></label>
+            <input id="harga" type="text" placeholder="Rp89.000">
+          </div>
+        </div>
+        <div>
+          <label for="kategori">Kategori <span class="opsional">(boleh kosong)</span></label>
+          <input id="kategori" type="text" list="pilihan-kategori" autocomplete="off">
+          <datalist id="pilihan-kategori"></datalist>
+        </div>
+        <div>
+          <label for="catatan">Catatan singkat <span class="opsional">(boleh kosong)</span></label>
+          <input id="catatan" type="text">
+        </div>
+        <p class="status" id="status" role="status" hidden></p>
+        <div class="tombol">
+          <button class="utama" id="simpan" type="submit">Simpan barang</button>
+          <button type="button" id="batal" hidden>Batal</button>
+          <button class="bahaya" type="button" id="hapus" hidden>Hapus barang</button>
+        </div>
+      </form>
+    </section>
+
+    <section aria-labelledby="judul-daftar">
+      <h2 id="judul-daftar">Barang di website</h2>
+      <p class="kosong" id="kosong" hidden></p>
+      <ul class="daftar" id="daftar"></ul>
+    </section>
+  </div>
+</div>
+
+<script>
+const REPO = "sabilaamarav/sabilaamarav.github.io";
+const API = "https://api.github.com";
+const RAW = "https://raw.githubusercontent.com";
+
+const el = (id) => document.getElementById(id);
+const SIMPANAN = "kunci-rak-spill";
+let kunci = "";
+let data = { contoh: false, barang: [] };
+let nomorDiubah = null;
+let fotoBaru = null;
+let urlPratinjau = "";
+
+class KunciDitolak extends Error {}
+class NomorDipakai extends Error {}
+
+function ingatKunci(nilai) {
+  kunci = nilai;
+  try {
+    if (nilai) localStorage.setItem(SIMPANAN, nilai);
+    else localStorage.removeItem(SIMPANAN);
+  } catch { /* Tanpa penyimpanan, kunci hanya berlaku sampai halaman ditutup. */ }
+}
+
+async function github(jalur, opsi = {}) {
+  const r = await fetch(`${API}/repos/${REPO}/contents/${jalur}`, {
+    cache: "no-store",
+    ...opsi,
+    headers: { Authorization: `Bearer ${kunci}`, Accept: "application/vnd.github+json" },
+  });
+  if (r.status === 401 || r.status === 403) throw new KunciDitolak();
+  return r;
+}
+
+async function ambilData() {
+  const r = await github("produk.json");
+  if (r.status === 404) throw new KunciDitolak();
+  if (!r.ok) throw new Error(String(r.status));
+  const berkas = await r.json();
+  const bita = Uint8Array.from(atob(berkas.content.replace(/\s/g, "")), (c) => c.charCodeAt(0));
+  return { sha: berkas.sha, isi: JSON.parse(new TextDecoder().decode(bita)) };
+}
+
+function keBase64(blob) {
+  return new Promise((selesai, gagal) => {
+    const baca = new FileReader();
+    baca.onload = () => selesai(String(baca.result).split(",")[1]);
+    baca.onerror = () => gagal(baca.error);
+    baca.readAsDataURL(blob);
+  });
+}
+
+async function tulisBerkas(jalur, base64, pesan, sha) {
+  const r = await github(jalur, {
+    method: "PUT",
+    body: JSON.stringify({ message: pesan, content: base64, ...(sha ? { sha } : {}) }),
+  });
+  if (r.status === 409 || r.status === 422) return false;
+  if (!r.ok) throw new Error(String(r.status));
+  return true;
+}
+
+// Selalu baca versi terbaru dulu, supaya simpanan dari iPad dan iPhone tidak saling menimpa.
+async function ubahData(ubah, pesan) {
+  for (let coba = 0; coba < 3; coba++) {
+    const { sha, isi } = await ambilData();
+    if (isi.contoh) { isi.contoh = false; isi.barang = []; }
+    ubah(isi);
+    const teks = JSON.stringify(isi, null, 2) + "\n";
+    const base64 = await keBase64(new Blob([teks]));
+    if (await tulisBerkas("produk.json", base64, pesan, sha)) {
+      data = isi;
+      return;
+    }
+  }
+  throw new Error("bentrok");
+}
+
+function tampilStatus(teks, gagal = false) {
+  el("status").textContent = teks;
+  el("status").classList.toggle("gagal", gagal);
+  el("status").hidden = !teks;
+}
+
+function alamatGambar(foto) {
+  if (/^https?:/i.test(foto)) return foto;
+  return `${RAW}/${REPO}/main/${foto}`;
+}
+
+function setPratinjau(src) {
+  el("pratinjau").src = src || "";
+  el("pratinjau").hidden = !src;
+  el("ajakan").textContent = src ? "" : "Pilih foto";
+}
+
+function nomorBerikut() {
+  return data.barang.reduce((besar, b) => Math.max(besar, b.nomor), 0) + 1;
+}
+
+function kosongkanForm() {
+  el("form").reset();
+  if (urlPratinjau) URL.revokeObjectURL(urlPratinjau);
+  urlPratinjau = "";
+  fotoBaru = null;
+  nomorDiubah = null;
+  setPratinjau("");
+  el("nomor").value = data.contoh ? 1 : nomorBerikut();
+  el("judul-form").textContent = "Tambah barang";
+  el("batal").hidden = true;
+  el("hapus").hidden = true;
+  el("hapus").textContent = "Hapus barang";
+  el("hapus").dataset.yakin = "";
+}
+
+function bukaUntukUbah(b) {
+  kosongkanForm();
+  nomorDiubah = b.nomor;
+  el("judul-form").textContent = `Ubah nomor ${b.nomor}`;
+  for (const k of ["nomor", "nama", "link", "harga", "kategori", "catatan"]) el(k).value = b[k] ?? "";
+  setPratinjau(b.foto ? alamatGambar(b.foto) : "");
+  el("batal").hidden = false;
+  el("hapus").hidden = false;
+  tampilStatus("");
+  scrollTo({ top: 0 });
+}
+
+function tampilkanDaftar() {
+  el("pilihan-kategori").replaceChildren(...[...new Set(data.barang.map((b) => b.kategori).filter(Boolean))].map((k) => {
+    const o = document.createElement("option");
+    o.value = k;
+    return o;
+  }));
+
+  const urut = data.contoh ? [] : [...data.barang].sort((a, b) => b.nomor - a.nomor);
+  el("kosong").hidden = urut.length > 0;
+  el("kosong").textContent = data.contoh
+    ? "Website masih menampilkan barang contoh. Contoh hilang otomatis saat barang pertama disimpan."
+    : "Belum ada barang.";
+  el("daftar").replaceChildren(...urut.map((b) => {
+    const li = document.createElement("li");
+    const t = document.createElement("button");
+    t.type = "button";
+    t.onclick = () => bukaUntukUbah(b);
+    const mini = document.createElement("span");
+    mini.className = "mini";
+    if (b.foto) {
+      const img = document.createElement("img");
+      img.src = alamatGambar(b.foto);
+      img.alt = "";
+      img.loading = "lazy";
+      img.onerror = () => { img.hidden = true; };
+      mini.append(img);
+    }
+    const no = document.createElement("b");
+    no.textContent = b.nomor;
+    const nama = document.createElement("span");
+    nama.textContent = b.nama;
+    t.append(mini, no, nama);
+    li.append(t);
+    return li;
+  }));
+}
+
+// Link dari tombol bagikan Shopee sering ikut membawa kalimat. Ambil alamatnya saja.
+function ambilAlamat(teks) {
+  const m = teks.match(/https?:\/\/[^\s"'<>]+/i);
+  return m ? m[0] : "";
+}
+
+async function kecilkanFoto(berkas) {
+  const url = URL.createObjectURL(berkas);
+  try {
+    const img = new Image();
+    img.src = url;
+    await img.decode();
+    const skala = Math.min(1, 1200 / Math.max(img.naturalWidth, img.naturalHeight));
+    const kanvas = document.createElement("canvas");
+    kanvas.width = Math.round(img.naturalWidth * skala);
+    kanvas.height = Math.round(img.naturalHeight * skala);
+    const c = kanvas.getContext("2d");
+    c.fillStyle = "#fff";
+    c.fillRect(0, 0, kanvas.width, kanvas.height);
+    c.drawImage(img, 0, 0, kanvas.width, kanvas.height);
+    return await new Promise((selesai) => kanvas.toBlob(selesai, "image/jpeg", 0.82));
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
+
+function pesanGagal(e) {
+  if (e instanceof KunciDitolak) return "Kunci ditolak atau sudah kedaluwarsa. Minta kunci baru, lalu masuk lagi.";
+  if (e instanceof NomorDipakai) return e.message;
+  return "Belum tersimpan. Cek internet, lalu ketuk Simpan lagi.";
+}
+
+function tanganiGagal(e) {
+  tampilStatus(pesanGagal(e), true);
+  if (e instanceof KunciDitolak) tampilkanKunci(pesanGagal(e));
+}
+
+async function simpan(ev) {
+  ev.preventDefault();
+  const nama = el("nama").value.trim();
+  const link = ambilAlamat(el("link").value);
+  const nomor = /^\d+$/.test(el("nomor").value.trim()) ? parseInt(el("nomor").value, 10) : 0;
+  const lama = data.barang.find((b) => b.nomor === nomorDiubah);
+
+  if (!fotoBaru && !lama?.foto) return tampilStatus("Pilih foto barangnya dulu.", true);
+  if (!link) return tampilStatus("Tempel link Shopee yang diawali https://.", true);
+  if (!nama) return tampilStatus("Isi nama barangnya.", true);
+  if (!nomor) return tampilStatus("Nomor harus berupa angka, misalnya 48.", true);
+
+  el("simpan").disabled = true;
+  tampilStatus("Menyimpan…");
+  try {
+    const cekDipakai = (isi) => {
+      if (nomor !== nomorDiubah && isi.barang.some((b) => b.nomor === nomor)) {
+        throw new NomorDipakai(`Nomor ${nomor} sudah dipakai. Ganti nomornya.`);
+      }
+    };
+    if (!data.contoh) cekDipakai(data);
+
+    let foto = lama?.foto || "";
+    if (fotoBaru) {
+      foto = `foto/${nomor}-${Date.now()}.jpg`;
+      const tertulis = await tulisBerkas(foto, await keBase64(fotoBaru), `Foto nomor ${nomor}`);
+      if (!tertulis) throw new Error("foto");
+    }
+    const baru = {
+      nomor, nama, link, foto,
+      kategori: el("kategori").value.trim(),
+      harga: el("harga").value.trim(),
+      catatan: el("catatan").value.trim(),
+    };
+    const nomorAsal = nomorDiubah;
+    await ubahData((isi) => {
+      cekDipakai(isi);
+      isi.barang = isi.barang.filter((b) => b.nomor !== nomorAsal);
+      isi.barang.push(baru);
+    }, `Simpan nomor ${nomor}`);
+    kosongkanForm();
+    tampilkanDaftar();
+    tampilStatus(`Nomor ${nomor} tersimpan. Muncul di website dalam beberapa menit.`);
+  } catch (e) {
+    tanganiGagal(e);
+  } finally {
+    el("simpan").disabled = false;
+  }
+}
+
+async function hapus() {
+  if (!el("hapus").dataset.yakin) {
+    el("hapus").dataset.yakin = "1";
+    el("hapus").textContent = "Ketuk lagi untuk menghapus";
+    return;
+  }
+  const nomor = nomorDiubah;
+  el("hapus").disabled = true;
+  tampilStatus("Menghapus…");
+  try {
+    await ubahData((isi) => { isi.barang = isi.barang.filter((b) => b.nomor !== nomor); }, `Hapus nomor ${nomor}`);
+    kosongkanForm();
+    tampilkanDaftar();
+    tampilStatus(`Nomor ${nomor} dihapus. Hilang dari website dalam beberapa menit.`);
+  } catch (e) {
+    tanganiGagal(e);
+  } finally {
+    el("hapus").disabled = false;
+  }
+}
+
+function tampilkanKunci(pesan) {
+  ingatKunci("");
+  el("layar-utama").hidden = true;
+  el("layar-kunci").hidden = false;
+  el("status-kunci").textContent = pesan || "";
+  el("status-kunci").hidden = !pesan;
+}
+
+async function masuk() {
+  try {
+    const { isi } = await ambilData();
+    data = isi;
+    ingatKunci(kunci);
+    el("layar-kunci").hidden = true;
+    el("layar-utama").hidden = false;
+    kosongkanForm();
+    tampilkanDaftar();
+  } catch (e) {
+    if (e instanceof KunciDitolak) tampilkanKunci("Kunci ditolak. Periksa lagi kuncinya.");
+    else {
+      el("layar-kunci").hidden = false;
+      el("status-kunci").textContent = "Tidak bisa tersambung. Cek internet, lalu coba lagi.";
+      el("status-kunci").hidden = false;
+    }
+  }
+}
+
+el("form-kunci").addEventListener("submit", (ev) => {
+  ev.preventDefault();
+  kunci = el("kunci").value.trim();
+  if (kunci) masuk();
+});
+el("form").addEventListener("submit", simpan);
+el("hapus").addEventListener("click", hapus);
+el("batal").addEventListener("click", () => { kosongkanForm(); tampilStatus(""); });
+el("link").addEventListener("change", () => {
+  const alamat = ambilAlamat(el("link").value);
+  if (alamat) el("link").value = alamat;
+});
+el("tempel").addEventListener("click", async () => {
+  try {
+    const alamat = ambilAlamat(await navigator.clipboard.readText());
+    if (alamat) { el("link").value = alamat; tampilStatus(""); }
+    else tampilStatus("Belum ada link yang tersalin. Salin link dari Shopee dulu.", true);
+  } catch {
+    tampilStatus("Tekan lama kolom link, lalu pilih Tempel.", true);
+    el("link").focus();
+  }
+});
+el("foto").addEventListener("change", async () => {
+  const berkas = el("foto").files[0];
+  if (!berkas) return;
+  tampilStatus("Menyiapkan foto…");
+  el("simpan").disabled = true;
+  try {
+    fotoBaru = await kecilkanFoto(berkas);
+    if (urlPratinjau) URL.revokeObjectURL(urlPratinjau);
+    urlPratinjau = URL.createObjectURL(fotoBaru);
+    setPratinjau(urlPratinjau);
+    tampilStatus("");
+  } catch {
+    fotoBaru = null;
+    tampilStatus("Foto ini tidak bisa dibuka. Pilih foto lain.", true);
+  } finally {
+    el("simpan").disabled = false;
+  }
+});
+
+try { kunci = localStorage.getItem(SIMPANAN) || ""; } catch { kunci = ""; }
+if (kunci) masuk();
+else tampilkanKunci("");
+</script>
+</body>
+</html>

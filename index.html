@@ -1,0 +1,340 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="claude:viewport-fit-sides" content="cover">
+<title>sabilaamarav</title>
+<meta name="description" content="Barang-barang dari video spill, lengkap dengan nomor, foto, dan link Shopee.">
+<meta property="og:title" content="sabilaamarav">
+<meta property="og:description" content="Cari nomor dari video, langsung ke barangnya di Shopee.">
+<meta property="og:type" content="website">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..600;1,6..96,400&family=Albert+Sans:wght@400;500&display=swap">
+<style>
+/* Layout: katalog rata kiri. Nomor besar dari video jadi jalan masuk utama,
+   dan foto seller yang beda-beda disatukan oleh satu warna bingkai. */
+:root {
+  --kertas: #f3f5f0;
+  --tinta: #1f3a32;
+  --redup: #5b6e66;
+  --garis: #c9d2c8;
+  --bingkai: #e2e8dc;
+  --tinta-foto: #1f3a32;
+  --sorot: #f0e7a8;
+  --serif: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
+  --sans: "Albert Sans", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --kertas: #15231f; --tinta: #e8eee5; --redup: #a3b3aa; --garis: #38493f;
+    --sorot: #4c4a26; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --kertas: #15231f; --tinta: #e8eee5; --redup: #a3b3aa; --garis: #38493f;
+  --sorot: #4c4a26; color-scheme: dark;
+}
+*, *::before, *::after { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--kertas);
+  color: var(--tinta);
+  font: 400 1rem/1.5 var(--sans);
+}
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--tinta); outline-offset: 3px; }
+
+.halaman {
+  max-width: 76rem;
+  margin-inline: auto;
+  padding-block: clamp(1.75rem, 5vw, 4rem) calc(2.5rem + env(safe-area-inset-bottom, 0px));
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+@media (min-width: 48rem) {
+  .halaman {
+    padding-left: max(40px, env(safe-area-inset-left, 0px));
+    padding-right: max(40px, env(safe-area-inset-right, 0px));
+  }
+}
+
+.kepala { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .25rem 2rem; }
+.kepala h1 { margin: 0; font: 500 1.25rem/1.2 var(--serif); }
+.kepala p { margin: 0; color: var(--redup); font-size: .9375rem; }
+
+.pencari { margin-top: clamp(2.25rem, 7vw, 4.5rem); }
+.pencari label { display: block; color: var(--redup); font-size: .9375rem; }
+.kolom { display: flex; align-items: baseline; gap: .15em; border-bottom: 1.5px solid var(--tinta); font: 400 clamp(3.25rem, 13vw, 8.5rem)/1.1 var(--serif); }
+.kolom span { font-style: italic; font-size: .55em; flex: none; }
+.kolom input {
+  flex: 1; min-width: 0; width: 100%;
+  border: 0; border-radius: 0; background: transparent; color: inherit;
+  padding: 0; font: inherit; font-variant-numeric: lining-nums;
+  -webkit-appearance: none; appearance: none;
+}
+.kolom input.kata { font-size: .5em; }
+.kolom input::placeholder { color: var(--redup); opacity: .55; }
+.kolom input:focus { outline: none; }
+.kolom:focus-within { border-bottom-width: 3px; margin-bottom: -1.5px; }
+
+.saring { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .25rem 1.5rem; margin-top: 1rem; }
+.kategori { display: flex; flex-wrap: wrap; gap: 0 1.1rem; margin-left: -.1rem; }
+.kategori button {
+  min-height: 44px; padding: 0 .1rem; border: 0; background: none; color: var(--redup);
+  font: inherit; cursor: pointer;
+}
+.kategori button:hover { color: var(--tinta); }
+.kategori button[aria-pressed="true"] { color: var(--tinta); text-decoration: underline; text-underline-offset: .35em; text-decoration-thickness: 1.5px; }
+.jumlah { margin: 0; color: var(--redup); font-size: .9375rem; font-variant-numeric: tabular-nums; }
+
+.contoh { margin: 1.25rem 0 0; padding: .5rem .75rem; background: var(--sorot); font-size: .9375rem; }
+
+.rak {
+  list-style: none; margin: clamp(1.5rem, 4vw, 2.75rem) 0 0; padding: 0;
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: clamp(2rem, 5vw, 3.5rem) clamp(.875rem, 2.5vw, 2rem);
+}
+@media (min-width: 48rem) { .rak { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+@media (min-width: 68rem) { .rak { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+
+.kartu { display: flex; flex-direction: column; height: 100%; text-decoration: none; }
+.bingkai { position: relative; display: block; aspect-ratio: 4 / 5; overflow: hidden; background: var(--bingkai); isolation: isolate; }
+/* Multiply melebur latar putih foto Shopee ke warna bingkai. */
+.bingkai img { display: block; width: 100%; height: 100%; object-fit: cover; mix-blend-mode: multiply; transition: transform .35s ease; }
+.kartu:hover .bingkai img { transform: scale(1.035); }
+.nomor { position: absolute; top: .3rem; left: .6rem; color: var(--tinta-foto); font: 400 clamp(2rem, 6vw, 3rem)/1.1 var(--serif); font-variant-numeric: lining-nums; }
+.nama { margin-top: .75rem; font-weight: 500; line-height: 1.3; }
+.catatan { margin-top: .2rem; color: var(--redup); font-size: .9375rem; line-height: 1.4; }
+.baris { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 .75rem; margin-top: auto; padding-top: .5rem; font-size: .9375rem; }
+.harga { font-variant-numeric: tabular-nums; }
+.aksi { text-decoration: underline; text-underline-offset: .25em; }
+
+.pesan { margin-top: 2.5rem; max-width: 32rem; }
+.pesan p { margin: 0 0 .75rem; }
+.pesan button {
+  min-height: 44px; padding: 0 1.1rem; border: 1.5px solid var(--tinta); border-radius: 0;
+  background: none; color: inherit; font: inherit; cursor: pointer;
+}
+
+.kaki { margin-top: clamp(3rem, 8vw, 5.5rem); padding-top: 1.25rem; border-top: 1px solid var(--garis); color: var(--redup); font-size: .9375rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem 3rem; }
+.kaki p { margin: 0; max-width: 38rem; }
+.sosmed { display: flex; flex-wrap: wrap; gap: 0 1.25rem; }
+.sosmed a { display: inline-flex; align-items: center; min-height: 44px; }
+
+@media (prefers-reduced-motion: reduce) { .bingkai img { transition: none; } .kartu:hover .bingkai img { transform: none; } }
+</style>
+</head>
+<body>
+<div class="halaman">
+  <header class="kepala">
+    <h1>sabilaamarav</h1>
+    <p>Semua barang dari videoku, ada di sini.</p>
+  </header>
+
+  <section class="pencari" aria-label="Cari barang">
+    <label for="cari">Ketik nomor dari video, atau nama barangnya</label>
+    <div class="kolom">
+      <span aria-hidden="true">no.</span>
+      <input id="cari" type="text" autocomplete="off" enterkeyhint="search" placeholder="47">
+    </div>
+    <div class="saring">
+      <div class="kategori" id="kategori" role="group" aria-label="Pilih kategori"></div>
+      <p class="jumlah" id="jumlah" role="status"></p>
+    </div>
+    <p class="contoh" id="contoh" hidden>Ini contoh tampilan. Barang, harga, dan gambarnya belum sungguhan.</p>
+  </section>
+
+  <main>
+    <ul class="rak" id="rak"></ul>
+    <div class="pesan" id="pesan" hidden></div>
+  </main>
+
+  <footer class="kaki">
+    <p>Link di halaman ini link affiliate. Kalau kamu belanja lewat link ini, aku dapat komisi. Harga dan stok mengikuti Shopee dan bisa berubah.</p>
+    <nav class="sosmed" id="sosmed" aria-label="Media sosial"></nav>
+  </footer>
+  <noscript><p>Aktifkan JavaScript untuk melihat daftar barang.</p></noscript>
+</div>
+
+<script>
+/* ===== Yang boleh diubah ===== */
+// Kosongkan link yang tidak dipakai.
+const SOSMED = [
+  { nama: "TikTok", link: "" },
+  { nama: "Instagram", link: "" },
+];
+/* ============================= */
+
+const el = (id) => document.getElementById(id);
+const SEMUA = "Semua";
+let barang = [];
+let kategoriAktif = SEMUA;
+
+// Hanya alamat http(s) yang boleh jadi link.
+function alamatAman(nilai, bolehRelatif) {
+  if (!nilai) return "";
+  try {
+    const u = new URL(nilai, bolehRelatif ? location.href : undefined);
+    return u.protocol === "https:" || u.protocol === "http:" ? u.href : "";
+  } catch { return ""; }
+}
+
+function rapikan(baris) {
+  return baris
+    .map((b) => ({
+      nomor: parseInt(b.nomor, 10),
+      nama: b.nama,
+      kategori: b.kategori,
+      harga: b.harga,
+      catatan: b.catatan,
+      foto: alamatAman(b.foto, true),
+      link: alamatAman(b.link, false),
+    }))
+    .filter((b) => b.nama && b.link && Number.isInteger(b.nomor))
+    .sort((a, b) => b.nomor - a.nomor);
+}
+
+function nomorDicari(q) {
+  const m = q.match(/^(?:no\.?\s*|nomor\s*|#)?(\d+)$/i);
+  return m ? parseInt(m[1], 10) : null;
+}
+
+function buatKartu(b) {
+  const span = (kelas, teks) => {
+    const s = document.createElement("span");
+    s.className = kelas;
+    s.textContent = teks;
+    return s;
+  };
+  const li = document.createElement("li");
+  const a = document.createElement("a");
+  a.className = "kartu";
+  a.href = b.link;
+  a.target = "_blank";
+  a.rel = "sponsored noopener";
+  a.setAttribute("aria-label", `Nomor ${b.nomor}, ${b.nama}. Lihat di Shopee`);
+
+  const bingkai = span("bingkai", "");
+  if (b.foto) {
+    const img = document.createElement("img");
+    img.src = b.foto;
+    img.alt = "";
+    img.loading = "lazy";
+    img.decoding = "async";
+    img.referrerPolicy = "no-referrer";
+    img.onerror = () => { img.hidden = true; };
+    bingkai.append(img);
+  }
+  bingkai.append(span("nomor", b.nomor));
+  a.append(bingkai, span("nama", b.nama));
+  if (b.catatan) a.append(span("catatan", b.catatan));
+
+  const baris = span("baris", "");
+  baris.append(span("harga", b.harga), span("aksi", "Lihat di Shopee"));
+  a.append(baris);
+  li.append(a);
+  return li;
+}
+
+function tampilkan() {
+  const q = el("cari").value.trim();
+  const nomor = nomorDicari(q);
+  el("cari").classList.toggle("kata", q !== "" && nomor === null);
+
+  const hasil = barang.filter((b) => {
+    if (kategoriAktif !== SEMUA && b.kategori !== kategoriAktif) return false;
+    if (!q) return true;
+    if (nomor !== null) return b.nomor === nomor;
+    return `${b.nama} ${b.kategori}`.toLowerCase().includes(q.toLowerCase());
+  });
+
+  el("rak").replaceChildren(...hasil.map(buatKartu));
+  el("jumlah").textContent = `${hasil.length} barang`;
+
+  const pesan = el("pesan");
+  pesan.hidden = hasil.length > 0;
+  if (!hasil.length) {
+    const teks = document.createElement("p");
+    teks.textContent = nomor !== null
+      ? `Nomor ${nomor} belum ada di sini. Cek lagi nomornya di video.`
+      : `Belum ada barang yang cocok dengan “${q}”.`;
+    const tombol = document.createElement("button");
+    tombol.type = "button";
+    tombol.textContent = "Lihat semua barang";
+    tombol.onclick = () => {
+      el("cari").value = "";
+      kategoriAktif = SEMUA;
+      buatKategori();
+      tampilkan();
+    };
+    pesan.replaceChildren(teks, tombol);
+  }
+}
+
+function buatKategori() {
+  const daftar = [SEMUA, ...new Set(barang.map((b) => b.kategori).filter(Boolean))];
+  el("kategori").replaceChildren(...daftar.map((nama) => {
+    const t = document.createElement("button");
+    t.type = "button";
+    t.textContent = nama;
+    t.setAttribute("aria-pressed", String(nama === kategoriAktif));
+    t.onclick = () => { kategoriAktif = nama; buatKategori(); tampilkan(); };
+    return t;
+  }));
+}
+
+// Link seperti situsku.com/#47 langsung membuka barang nomor 47.
+function bacaAlamat() {
+  const nomor = location.hash.slice(1);
+  if (/^\d+$/.test(nomor)) el("cari").value = nomor;
+}
+
+function tampilkanGagal() {
+  el("jumlah").textContent = "";
+  const teks = document.createElement("p");
+  teks.textContent = "Daftar barang belum bisa dimuat. Cek koneksi internet, lalu muat ulang halaman ini.";
+  const tombol = document.createElement("button");
+  tombol.type = "button";
+  tombol.textContent = "Muat ulang";
+  tombol.onclick = () => location.reload();
+  el("pesan").replaceChildren(teks, tombol);
+  el("pesan").hidden = false;
+}
+
+async function mulai() {
+  el("sosmed").replaceChildren(...SOSMED.flatMap((s) => {
+    const link = alamatAman(s.link, false);
+    if (!link) return [];
+    const a = document.createElement("a");
+    a.href = link;
+    a.target = "_blank";
+    a.rel = "noopener";
+    a.textContent = s.nama;
+    return [a];
+  }));
+  bacaAlamat();
+  el("cari").addEventListener("input", tampilkan);
+  window.addEventListener("hashchange", () => { bacaAlamat(); tampilkan(); });
+
+  el("jumlah").textContent = "Memuat barang…";
+  try {
+    const r = await fetch("produk.json", { cache: "no-cache" });
+    if (!r.ok) throw new Error(r.status);
+    const data = await r.json();
+    barang = rapikan(data.barang);
+    el("contoh").hidden = !data.contoh;
+  } catch {
+    tampilkanGagal();
+    return;
+  }
+  buatKategori();
+  tampilkan();
+}
+mulai();
+</script>
+</body>
+</html>
