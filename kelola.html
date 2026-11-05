@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
+<meta name="theme-color" content="#6d1a2d">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Kelola Spill">
@@ -15,87 +16,106 @@
 <style>
 /* Layout: satu formulir besar untuk jempol. Di iPad, daftar barang pindah ke samping. */
 :root {
-  --kertas: #f3f5f0; --tinta: #1f3a32; --redup: #5b6e66; --garis: #c9d2c8;
-  --bingkai: #e2e8dc; --tinta-foto: #1f3a32; --sorot: #f0e7a8; --bahaya: #a3271b;
+  --kertas: #fbf7f5; --tinta: #2f1219; --redup: #7a5c62; --garis: #e2d0ce;
+  --tombol: #6d1a2d; --tombol-teks: #fbf7f5; --sorot: #f1e4e2; --bahaya: #a3271b;
+  --burgundy: #6d1a2d; --champagne: #ebd9c4; --putih: #fbf7f5; --bingkai: #f1e4e2;
   --serif: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
   --sans: "Albert Sans", -apple-system, "Segoe UI", system-ui, sans-serif;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --kertas: #15231f; --tinta: #e8eee5; --redup: #a3b3aa; --garis: #38493f;
-    --sorot: #4c4a26; --bahaya: #ff9d90; color-scheme: dark;
+    --kertas: #1e0e12; --tinta: #f6ecea; --redup: #c9aeb3; --garis: #472a31;
+    --tombol: #e8b4bd; --tombol-teks: #2f1219; --sorot: #2e171d; --bahaya: #ff9d90; color-scheme: dark;
   }
 }
 *, *::before, *::after { box-sizing: border-box; }
 [hidden] { display: none !important; }
 html { -webkit-text-size-adjust: 100%; }
 body { margin: 0; background: var(--kertas); color: var(--tinta); font: 400 1rem/1.5 var(--sans); }
-:focus-visible { outline: 2px solid var(--tinta); outline-offset: 2px; }
+:focus-visible { outline: 2px solid var(--tombol); outline-offset: 2px; }
 
-.halaman {
+.lebar {
   max-width: 60rem; margin-inline: auto;
-  padding-block: calc(1.25rem + env(safe-area-inset-top, 0px)) calc(2.5rem + env(safe-area-inset-bottom, 0px));
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
-.kepala { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; flex-wrap: wrap; }
-h1 { margin: 0; font: 500 1.5rem/1.2 var(--serif); }
-h2 { margin: 0 0 .5rem; font: 500 1.25rem/1.2 var(--serif); }
-.kepala a { color: var(--redup); }
+.kepala { background: var(--burgundy); color: var(--putih); padding-block: calc(1rem + env(safe-area-inset-top, 0px)) 1rem; }
+.kepala .lebar { display: flex; justify-content: space-between; align-items: baseline; gap: .25rem 1rem; flex-wrap: wrap; }
+.kepala :focus-visible { outline-color: var(--champagne); }
+h1 { margin: 0; font: 400 1.5rem/1.2 var(--serif); }
+h2 { margin: 0 0 .75rem; font: 400 1.5rem/1.2 var(--serif); }
+.kepala a { display: inline-flex; align-items: center; min-height: 44px; color: var(--champagne); }
+.isi { padding-block: 1.25rem calc(2.5rem + env(safe-area-inset-bottom, 0px)); }
 
-.susunan { display: grid; gap: 2.5rem; margin-top: 1.25rem; }
-@media (min-width: 48rem) { .susunan { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 3rem; align-items: start; } }
+.susunan { display: grid; gap: 2.5rem; }
+@media (min-width: 48rem) { .susunan { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 2.5rem; align-items: start; } }
+.susunan > * { min-width: 0; }
 
 form { display: grid; gap: 1rem; }
 label, .judul-kolom { display: block; font-weight: 500; margin-bottom: .25rem; }
 .opsional { color: var(--redup); font-weight: 400; }
 /* 16px mencegah Safari iOS memperbesar halaman saat kolom diketuk. */
-input[type="text"], input[type="password"], textarea {
+input[type="text"], input[type="password"], input[type="search"] {
   width: 100%; min-height: 48px; padding: .6rem .75rem;
   border: 1.5px solid var(--garis); border-radius: 0; background: transparent; color: inherit;
   font: 400 16px/1.4 var(--sans); -webkit-appearance: none; appearance: none;
 }
-input:focus, textarea:focus { outline: none; border-color: var(--tinta); }
+input:focus { outline: none; border-color: var(--tombol); }
 .dua { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: .75rem; }
 .gabung { display: flex; gap: .5rem; }
 .gabung input { flex: 1; min-width: 0; }
 
 .pilih-foto {
   position: relative; display: block; width: min(100%, 15rem); aspect-ratio: 4 / 5; margin: 0;
-  background: var(--bingkai); color: var(--tinta-foto); overflow: hidden; cursor: pointer; isolation: isolate;
+  background: var(--bingkai); color: var(--burgundy); font-weight: 400; overflow: hidden; cursor: pointer; isolation: isolate;
 }
 .pilih-foto input { position: absolute; inset: 0; opacity: 0; width: 100%; height: 100%; cursor: pointer; }
-.pilih-foto:focus-within { outline: 2px solid var(--tinta); outline-offset: 2px; }
+.pilih-foto:focus-within { outline: 2px solid var(--tombol); outline-offset: 2px; }
 .pilih-foto img { display: block; width: 100%; height: 100%; object-fit: cover; mix-blend-mode: multiply; }
 .ajakan { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-weight: 500; text-decoration: underline; text-underline-offset: .25em; pointer-events: none; }
 
-button { min-height: 48px; padding: 0 1rem; border: 1.5px solid var(--tinta); border-radius: 0; background: transparent; color: var(--tinta); font: 500 1rem/1 var(--sans); cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.pilihan { display: flex; align-items: flex-start; gap: .6rem; min-height: 44px; margin: 0; font-weight: 500; cursor: pointer; }
+.pilihan input { flex: none; width: 1.4rem; height: 1.4rem; margin: .05rem 0 0; accent-color: var(--tombol); }
+.pilihan small { display: block; color: var(--redup); font-size: .9375rem; font-weight: 400; }
+
+button { min-height: 48px; padding: 0 1rem; border: 1.5px solid var(--tombol); border-radius: 0; background: transparent; color: var(--tinta); font: 500 1rem/1.2 var(--sans); cursor: pointer; -webkit-tap-highlight-color: transparent; }
 button[disabled] { opacity: .55; }
-.utama { background: var(--tinta); color: var(--kertas); }
+.utama { background: var(--tombol); color: var(--tombol-teks); }
 .bahaya { border-color: var(--bahaya); color: var(--bahaya); }
 .tombol { display: flex; flex-wrap: wrap; gap: .5rem; }
 .tombol .utama { flex: 1 1 100%; }
 .tombol button:not(.utama) { flex: 1 1 8rem; }
 
-.status { margin: 0; padding: .6rem .75rem; background: var(--sorot); }
+.status { margin: 0; padding: .6rem .75rem; background: var(--sorot); overflow-wrap: anywhere; }
 .status.gagal { background: transparent; border: 1.5px solid var(--bahaya); color: var(--bahaya); }
 
+.cari-daftar { margin-bottom: .75rem; }
+.jumlah { margin: 0 0 .5rem; color: var(--redup); font-size: .9375rem; }
 .daftar { list-style: none; margin: 0; padding: 0; }
-.daftar button { display: grid; grid-template-columns: 3rem 2.75rem minmax(0, 1fr); align-items: center; gap: .6rem; width: 100%; min-height: 60px; padding: .3rem 0; border: 0; border-top: 1px solid var(--garis); text-align: left; font-weight: 400; line-height: 1.3; }
+.daftar li { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: .5rem; border-top: 1px solid var(--garis); }
+.buka { display: grid; grid-template-columns: 3rem 2.25rem minmax(0, 1fr); align-items: center; gap: .6rem; width: 100%; min-height: 72px; padding: .4rem 0; border: 0; text-align: left; font-weight: 400; line-height: 1.3; }
+.salin { min-height: 44px; padding: 0 .6rem; border-width: 1px; font-size: .875rem; font-weight: 400; }
 .mini { display: block; width: 3rem; aspect-ratio: 4 / 5; background: var(--bingkai); isolation: isolate; overflow: hidden; }
 .mini img { display: block; width: 100%; height: 100%; object-fit: cover; mix-blend-mode: multiply; }
 .daftar b { font: 400 1.35rem/1 var(--serif); font-variant-numeric: lining-nums; }
+.buka > span:last-child { min-width: 0; overflow-wrap: anywhere; }
+.tanda { display: block; color: var(--redup); font-size: .875rem; }
 .kosong { color: var(--redup); margin: 0; }
+
+details { margin-top: 2rem; border-top: 1px solid var(--garis); }
+summary { display: flex; align-items: center; min-height: 52px; font: 400 1.5rem/1.2 var(--serif); cursor: pointer; }
 </style>
 </head>
 <body>
-<div class="halaman">
-  <header class="kepala">
+<header class="kepala">
+  <div class="lebar">
     <h1>Kelola sabilaamarav</h1>
     <a href="./" target="_blank" rel="noopener">Lihat website</a>
-  </header>
+  </div>
+</header>
 
-  <section id="layar-kunci" hidden style="margin-top:1.5rem">
+<div class="lebar isi">
+  <section id="layar-kunci" hidden>
     <form id="form-kunci">
       <div>
         <label for="kunci">Kunci website</label>
@@ -112,7 +132,7 @@ button[disabled] { opacity: .55; }
       <form id="form" novalidate>
         <div>
           <span class="judul-kolom">Foto</span>
-          <label class="pilih-foto" for="foto" style="margin:0;font-weight:400">
+          <label class="pilih-foto" for="foto">
             <img id="pratinjau" alt="Foto barang" hidden>
             <span class="ajakan" id="ajakan">Pilih foto</span>
             <input id="foto" type="file" accept="image/*">
@@ -146,8 +166,20 @@ button[disabled] { opacity: .55; }
         </div>
         <div>
           <label for="catatan">Catatan singkat <span class="opsional">(boleh kosong)</span></label>
-          <input id="catatan" type="text">
+          <input id="catatan" type="text" placeholder="Satu kalimat dari pengalaman sendiri">
         </div>
+        <div>
+          <label for="video">Link video review <span class="opsional">(boleh kosong)</span></label>
+          <input id="video" type="text" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="https://www.tiktok.com/…">
+        </div>
+        <label class="pilihan">
+          <input id="favorit" type="checkbox">
+          <span>Tandai favorit<small>Tampil paling atas di website.</small></span>
+        </label>
+        <label class="pilihan">
+          <input id="sembunyi" type="checkbox">
+          <span>Sembunyikan dari website<small>Untuk stok habis. Barang tetap tersimpan di sini.</small></span>
+        </label>
         <p class="status" id="status" role="status" hidden></p>
         <div class="tombol">
           <button class="utama" id="simpan" type="submit">Simpan barang</button>
@@ -157,11 +189,38 @@ button[disabled] { opacity: .55; }
       </form>
     </section>
 
-    <section aria-labelledby="judul-daftar">
-      <h2 id="judul-daftar">Barang di website</h2>
-      <p class="kosong" id="kosong" hidden></p>
-      <ul class="daftar" id="daftar"></ul>
-    </section>
+    <div>
+      <section aria-labelledby="judul-daftar">
+        <h2 id="judul-daftar">Barang di website</h2>
+        <div class="cari-daftar">
+          <label for="cari-daftar">Cari barang</label>
+          <input id="cari-daftar" type="search" autocomplete="off" placeholder="Nomor atau nama">
+        </div>
+        <p class="jumlah" id="jumlah" role="status"></p>
+        <p class="kosong" id="kosong" hidden></p>
+        <ul class="daftar" id="daftar"></ul>
+      </section>
+
+      <details>
+        <summary>Pengaturan website</summary>
+        <form id="form-atur" novalidate>
+          <div>
+            <label for="tagline">Kalimat di bawah nama</label>
+            <input id="tagline" type="text" placeholder="Semua barang dari videoku, ada di sini.">
+          </div>
+          <div>
+            <label for="tiktok">Link TikTok <span class="opsional">(boleh kosong)</span></label>
+            <input id="tiktok" type="text" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="https://www.tiktok.com/@…">
+          </div>
+          <div>
+            <label for="instagram">Link Instagram <span class="opsional">(boleh kosong)</span></label>
+            <input id="instagram" type="text" inputmode="url" autocapitalize="off" autocorrect="off" spellcheck="false" placeholder="https://www.instagram.com/…">
+          </div>
+          <p class="status" id="status-atur" role="status" hidden></p>
+          <button class="utama" id="simpan-atur" type="submit">Simpan pengaturan</button>
+        </form>
+      </details>
+    </div>
   </div>
 </div>
 
@@ -172,6 +231,7 @@ const RAW = "https://raw.githubusercontent.com";
 
 const el = (id) => document.getElementById(id);
 const SIMPANAN = "kunci-rak-spill";
+const KOLOM = ["nomor", "nama", "link", "harga", "kategori", "catatan", "video"];
 let kunci = "";
 let data = { contoh: false, barang: [] };
 let nomorDiubah = null;
@@ -243,10 +303,10 @@ async function ubahData(ubah, pesan) {
   throw new Error("bentrok");
 }
 
-function tampilStatus(teks, gagal = false) {
-  el("status").textContent = teks;
-  el("status").classList.toggle("gagal", gagal);
-  el("status").hidden = !teks;
+function tampilStatus(teks, gagal = false, id = "status") {
+  el(id).textContent = teks;
+  el(id).classList.toggle("gagal", gagal);
+  el(id).hidden = !teks;
 }
 
 function alamatGambar(foto) {
@@ -283,12 +343,74 @@ function bukaUntukUbah(b) {
   kosongkanForm();
   nomorDiubah = b.nomor;
   el("judul-form").textContent = `Ubah nomor ${b.nomor}`;
-  for (const k of ["nomor", "nama", "link", "harga", "kategori", "catatan"]) el(k).value = b[k] ?? "";
+  for (const k of KOLOM) el(k).value = b[k] ?? "";
+  el("favorit").checked = b.favorit === true;
+  el("sembunyi").checked = b.sembunyi === true;
   setPratinjau(b.foto ? alamatGambar(b.foto) : "");
   el("batal").hidden = false;
   el("hapus").hidden = false;
   tampilStatus("");
   scrollTo({ top: 0 });
+}
+
+function alamatBarang(nomor) {
+  return new URL(`./#${nomor}`, location.href).href;
+}
+
+async function salinLink(nomor) {
+  const alamat = alamatBarang(nomor);
+  try {
+    await navigator.clipboard.writeText(alamat);
+    tampilStatus(`Link nomor ${nomor} tersalin: ${alamat}`);
+  } catch {
+    tampilStatus(`Salin link ini: ${alamat}`);
+  }
+  scrollTo({ top: 0 });
+}
+
+function cocok(b, q) {
+  if (!q) return true;
+  const teks = `${b.nomor} ${b.nama} ${b.kategori || ""}`.toLowerCase();
+  return q.toLowerCase().split(/\s+/).every((kata) => teks.includes(kata));
+}
+
+function buatBaris(b) {
+  const li = document.createElement("li");
+  const t = document.createElement("button");
+  t.type = "button";
+  t.className = "buka";
+  t.onclick = () => bukaUntukUbah(b);
+  const mini = document.createElement("span");
+  mini.className = "mini";
+  if (b.foto) {
+    const img = document.createElement("img");
+    img.src = alamatGambar(b.foto);
+    img.alt = "";
+    img.loading = "lazy";
+    img.onerror = () => { img.hidden = true; };
+    mini.append(img);
+  }
+  const no = document.createElement("b");
+  no.textContent = b.nomor;
+  const nama = document.createElement("span");
+  nama.textContent = b.nama;
+  const tanda = [b.favorit && "Favorit", b.sembunyi && "Disembunyikan"].filter(Boolean).join(", ");
+  if (tanda) {
+    const kecil = document.createElement("span");
+    kecil.className = "tanda";
+    kecil.textContent = tanda;
+    nama.append(kecil);
+  }
+  t.append(mini, no, nama);
+
+  const salin = document.createElement("button");
+  salin.type = "button";
+  salin.className = "salin";
+  salin.textContent = "Salin link";
+  salin.setAttribute("aria-label", `Salin link nomor ${b.nomor}`);
+  salin.onclick = () => salinLink(b.nomor);
+  li.append(t, salin);
+  return li;
 }
 
 function tampilkanDaftar() {
@@ -298,34 +420,21 @@ function tampilkanDaftar() {
     return o;
   }));
 
-  const urut = data.contoh ? [] : [...data.barang].sort((a, b) => b.nomor - a.nomor);
+  const q = el("cari-daftar").value.trim();
+  const urut = data.contoh ? [] : data.barang
+    .filter((b) => cocok(b, q))
+    .sort((a, b) => b.nomor - a.nomor);
+  el("jumlah").textContent = data.contoh ? "" : `${urut.length} barang`;
   el("kosong").hidden = urut.length > 0;
   el("kosong").textContent = data.contoh
     ? "Website masih menampilkan barang contoh. Contoh hilang otomatis saat barang pertama disimpan."
-    : "Belum ada barang.";
-  el("daftar").replaceChildren(...urut.map((b) => {
-    const li = document.createElement("li");
-    const t = document.createElement("button");
-    t.type = "button";
-    t.onclick = () => bukaUntukUbah(b);
-    const mini = document.createElement("span");
-    mini.className = "mini";
-    if (b.foto) {
-      const img = document.createElement("img");
-      img.src = alamatGambar(b.foto);
-      img.alt = "";
-      img.loading = "lazy";
-      img.onerror = () => { img.hidden = true; };
-      mini.append(img);
-    }
-    const no = document.createElement("b");
-    no.textContent = b.nomor;
-    const nama = document.createElement("span");
-    nama.textContent = b.nama;
-    t.append(mini, no, nama);
-    li.append(t);
-    return li;
-  }));
+    : q ? `Tidak ada barang yang cocok dengan “${q}”.` : "Barang yang disimpan akan muncul di sini.";
+  el("daftar").replaceChildren(...urut.map(buatBaris));
+}
+
+function isiPengaturan() {
+  const atur = data.pengaturan || {};
+  for (const k of ["tagline", "tiktok", "instagram"]) el(k).value = atur[k] || "";
 }
 
 // Link dari tombol bagikan Shopee sering ikut membawa kalimat. Ambil alamatnya saja.
@@ -355,13 +464,13 @@ async function kecilkanFoto(berkas) {
 }
 
 function pesanGagal(e) {
-  if (e instanceof KunciDitolak) return "Kunci ditolak atau sudah kedaluwarsa. Minta kunci baru, lalu masuk lagi.";
+  if (e instanceof KunciDitolak) return "Kunci ditolak atau sudah kedaluwarsa. Buat kunci baru, lalu masuk lagi.";
   if (e instanceof NomorDipakai) return e.message;
-  return "Belum tersimpan. Cek internet, lalu ketuk Simpan lagi.";
+  return "Belum tersimpan. Cek internet, lalu coba simpan lagi.";
 }
 
-function tanganiGagal(e) {
-  tampilStatus(pesanGagal(e), true);
+function tanganiGagal(e, id = "status") {
+  tampilStatus(pesanGagal(e), true, id);
   if (e instanceof KunciDitolak) tampilkanKunci(pesanGagal(e));
 }
 
@@ -369,6 +478,8 @@ async function simpan(ev) {
   ev.preventDefault();
   const nama = el("nama").value.trim();
   const link = ambilAlamat(el("link").value);
+  const isiVideo = el("video").value.trim();
+  const video = ambilAlamat(isiVideo);
   const nomor = /^\d+$/.test(el("nomor").value.trim()) ? parseInt(el("nomor").value, 10) : 0;
   const lama = data.barang.find((b) => b.nomor === nomorDiubah);
 
@@ -376,6 +487,7 @@ async function simpan(ev) {
   if (!link) return tampilStatus("Tempel link Shopee yang diawali https://.", true);
   if (!nama) return tampilStatus("Isi nama barangnya.", true);
   if (!nomor) return tampilStatus("Nomor harus berupa angka, misalnya 48.", true);
+  if (isiVideo && !video) return tampilStatus("Link video harus diawali https://.", true);
 
   el("simpan").disabled = true;
   tampilStatus("Menyimpan…");
@@ -394,10 +506,12 @@ async function simpan(ev) {
       if (!tertulis) throw new Error("foto");
     }
     const baru = {
-      nomor, nama, link, foto,
+      nomor, nama, link, foto, video,
       kategori: el("kategori").value.trim(),
       harga: el("harga").value.trim(),
       catatan: el("catatan").value.trim(),
+      favorit: el("favorit").checked,
+      sembunyi: el("sembunyi").checked,
     };
     const nomorAsal = nomorDiubah;
     await ubahData((isi) => {
@@ -407,7 +521,9 @@ async function simpan(ev) {
     }, `Simpan nomor ${nomor}`);
     kosongkanForm();
     tampilkanDaftar();
-    tampilStatus(`Nomor ${nomor} tersimpan. Muncul di website dalam beberapa menit.`);
+    tampilStatus(baru.sembunyi
+      ? `Nomor ${nomor} tersimpan dan disembunyikan. Hilang dari website dalam beberapa menit.`
+      : `Nomor ${nomor} tersimpan. Muncul di website dalam beberapa menit.`);
   } catch (e) {
     tanganiGagal(e);
   } finally {
@@ -436,6 +552,26 @@ async function hapus() {
   }
 }
 
+async function simpanPengaturan(ev) {
+  ev.preventDefault();
+  const atur = { tagline: el("tagline").value.trim() };
+  for (const k of ["tiktok", "instagram"]) {
+    const isi = el(k).value.trim();
+    atur[k] = ambilAlamat(isi);
+    if (isi && !atur[k]) return tampilStatus("Link sosial media harus diawali https://.", true, "status-atur");
+  }
+  el("simpan-atur").disabled = true;
+  tampilStatus("Menyimpan…", false, "status-atur");
+  try {
+    await ubahData((isi) => { isi.pengaturan = atur; }, "Simpan pengaturan");
+    tampilStatus("Pengaturan tersimpan. Muncul di website dalam beberapa menit.", false, "status-atur");
+  } catch (e) {
+    tanganiGagal(e, "status-atur");
+  } finally {
+    el("simpan-atur").disabled = false;
+  }
+}
+
 function tampilkanKunci(pesan) {
   ingatKunci("");
   el("layar-utama").hidden = true;
@@ -453,6 +589,7 @@ async function masuk() {
     el("layar-utama").hidden = false;
     kosongkanForm();
     tampilkanDaftar();
+    isiPengaturan();
   } catch (e) {
     if (e instanceof KunciDitolak) tampilkanKunci("Kunci ditolak. Periksa lagi kuncinya.");
     else {
@@ -469,8 +606,10 @@ el("form-kunci").addEventListener("submit", (ev) => {
   if (kunci) masuk();
 });
 el("form").addEventListener("submit", simpan);
+el("form-atur").addEventListener("submit", simpanPengaturan);
 el("hapus").addEventListener("click", hapus);
 el("batal").addEventListener("click", () => { kosongkanForm(); tampilStatus(""); });
+el("cari-daftar").addEventListener("input", tampilkanDaftar);
 el("link").addEventListener("change", () => {
   const alamat = ambilAlamat(el("link").value);
   if (alamat) el("link").value = alamat;

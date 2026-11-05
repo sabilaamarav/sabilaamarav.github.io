@@ -4,151 +4,166 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="claude:viewport-fit-sides" content="cover">
+<meta name="theme-color" content="#6d1a2d">
 <title>sabilaamarav</title>
 <meta name="description" content="Barang-barang dari video spill, lengkap dengan nomor, foto, dan link Shopee.">
 <meta property="og:title" content="sabilaamarav">
-<meta property="og:description" content="Cari nomor dari video, langsung ke barangnya di Shopee.">
+<meta property="og:description" content="Cari nomor atau nama barang dari video, lalu langsung ke Shopee.">
 <meta property="og:type" content="website">
+<link rel="icon" href="ikon.png">
+<link rel="apple-touch-icon" href="ikon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..600;1,6..96,400&family=Albert+Sans:wght@400;500&display=swap">
 <style>
-/* Layout: katalog rata kiri. Nomor besar dari video jadi jalan masuk utama,
-   dan foto seller yang beda-beda disatukan oleh satu warna bingkai. */
+/* Layout: pita burgundy berisi nama dan pencarian, lalu katalog terang rata kiri.
+   Foto seller yang beda-beda disatukan oleh satu warna bingkai. */
 :root {
-  --kertas: #f3f5f0;
-  --tinta: #1f3a32;
-  --redup: #5b6e66;
-  --garis: #c9d2c8;
-  --bingkai: #e2e8dc;
-  --tinta-foto: #1f3a32;
-  --sorot: #f0e7a8;
+  --kertas: #fbf7f5;
+  --tinta: #2f1219;
+  --redup: #7a5c62;
+  --garis: #e2d0ce;
+  --tombol: #6d1a2d;
+  --tombol-teks: #fbf7f5;
+  --sorot: #f1e4e2;
+  /* Warna di bawah ini sama di mode terang dan gelap. */
+  --burgundy: #6d1a2d;
+  --champagne: #ebd9c4;
+  --putih: #fbf7f5;
+  --bingkai: #f1e4e2;
+  --tinta-tetap: #2f1219;
+  --redup-tetap: #7a5c62;
   --serif: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
-  --sans: "Albert Sans", "Segoe UI", system-ui, sans-serif;
+  --sans: "Albert Sans", -apple-system, "Segoe UI", system-ui, sans-serif;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --kertas: #15231f; --tinta: #e8eee5; --redup: #a3b3aa; --garis: #38493f;
-    --sorot: #4c4a26; color-scheme: dark;
+    --kertas: #1e0e12; --tinta: #f6ecea; --redup: #c9aeb3; --garis: #472a31;
+    --tombol: #e8b4bd; --tombol-teks: #2f1219; --sorot: #2e171d; color-scheme: dark;
   }
 }
 :root[data-theme="dark"] {
-  --kertas: #15231f; --tinta: #e8eee5; --redup: #a3b3aa; --garis: #38493f;
-  --sorot: #4c4a26; color-scheme: dark;
+  --kertas: #1e0e12; --tinta: #f6ecea; --redup: #c9aeb3; --garis: #472a31;
+  --tombol: #e8b4bd; --tombol-teks: #2f1219; --sorot: #2e171d; color-scheme: dark;
 }
 *, *::before, *::after { box-sizing: border-box; }
 [hidden] { display: none !important; }
 html { -webkit-text-size-adjust: 100%; }
-body {
-  margin: 0;
-  background: var(--kertas);
-  color: var(--tinta);
-  font: 400 1rem/1.5 var(--sans);
-}
+body { margin: 0; background: var(--kertas); color: var(--tinta); font: 400 1rem/1.5 var(--sans); }
 a { color: inherit; }
-:focus-visible { outline: 2px solid var(--tinta); outline-offset: 3px; }
+:focus-visible { outline: 2px solid var(--tombol); outline-offset: 3px; }
 
-.halaman {
+.lebar {
   max-width: 76rem;
   margin-inline: auto;
-  padding-block: clamp(1.75rem, 5vw, 4rem) calc(2.5rem + env(safe-area-inset-bottom, 0px));
   padding-left: max(16px, env(safe-area-inset-left, 0px));
   padding-right: max(16px, env(safe-area-inset-right, 0px));
 }
 @media (min-width: 48rem) {
-  .halaman {
+  .lebar {
     padding-left: max(40px, env(safe-area-inset-left, 0px));
     padding-right: max(40px, env(safe-area-inset-right, 0px));
   }
 }
 
-.kepala { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .25rem 2rem; }
-.kepala h1 { margin: 0; font: 500 1.25rem/1.2 var(--serif); }
-.kepala p { margin: 0; color: var(--redup); font-size: .9375rem; }
-
-.pencari { margin-top: clamp(2.25rem, 7vw, 4.5rem); }
-.pencari label { display: block; color: var(--redup); font-size: .9375rem; }
-.kolom { display: flex; align-items: baseline; gap: .15em; border-bottom: 1.5px solid var(--tinta); font: 400 clamp(3.25rem, 13vw, 8.5rem)/1.1 var(--serif); }
-.kolom span { font-style: italic; font-size: .55em; flex: none; }
-.kolom input {
-  flex: 1; min-width: 0; width: 100%;
-  border: 0; border-radius: 0; background: transparent; color: inherit;
-  padding: 0; font: inherit; font-variant-numeric: lining-nums;
-  -webkit-appearance: none; appearance: none;
+.pita { background: var(--burgundy); color: var(--putih); padding-block: clamp(2rem, 6vw, 4rem) clamp(1.75rem, 5vw, 3rem); }
+.pita :focus-visible { outline-color: var(--champagne); }
+.pita h1 { margin: 0; font: 400 clamp(2.5rem, 9vw, 5.5rem)/1.05 var(--serif); overflow-wrap: anywhere; }
+.pita p { margin: .5rem 0 0; color: var(--champagne); max-width: 38rem; }
+.cari { position: relative; display: block; max-width: 38rem; margin-top: clamp(1.25rem, 4vw, 2rem); }
+.cari svg { position: absolute; left: .9rem; top: 50%; translate: 0 -50%; width: 1.25rem; height: 1.25rem; color: var(--redup-tetap); pointer-events: none; }
+.cari input {
+  width: 100%; min-height: 54px; padding: .5rem 3.25rem .5rem 2.9rem;
+  border: 0; border-radius: 0; background: var(--putih); color: var(--tinta-tetap);
+  font: 400 16px/1.3 var(--sans); -webkit-appearance: none; appearance: none;
 }
-.kolom input.kata { font-size: .5em; }
-.kolom input::placeholder { color: var(--redup); opacity: .55; }
-.kolom input:focus { outline: none; }
-.kolom:focus-within { border-bottom-width: 3px; margin-bottom: -1.5px; }
+.cari input::placeholder { color: var(--redup-tetap); opacity: 1; }
+.cari input::-webkit-search-cancel-button { display: none; }
+.bersihkan {
+  position: absolute; right: 0; top: 0; width: 3rem; height: 100%;
+  border: 0; background: none; color: var(--tinta-tetap); font: 400 1.5rem/1 var(--sans); cursor: pointer;
+}
 
-.saring { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .25rem 1.5rem; margin-top: 1rem; }
+.isi { padding-block: 1.25rem calc(2.5rem + env(safe-area-inset-bottom, 0px)); }
+.sorotan { display: grid; gap: 1rem 2rem; margin-bottom: 2.5rem; padding-bottom: 2.5rem; border-bottom: 1px solid var(--garis); }
+@media (min-width: 48rem) { .sorotan { grid-template-columns: minmax(0, 22rem) minmax(0, 1fr); align-items: center; } }
+.sorotan h2 { margin: 0; font: 400 clamp(1.75rem, 5vw, 2.75rem)/1.15 var(--serif); }
+.sorotan p { margin: .5rem 0 0; color: var(--redup); max-width: 34rem; }
+.sorotan .harga { margin-top: .75rem; font-size: 1.125rem; }
+.sorotan .tombol { max-width: 22rem; margin-top: 1rem; }
+.sorotan .nomor { font-size: clamp(2rem, 7vw, 3rem); }
+.belum { margin: 0 0 1.5rem; padding: .6rem .75rem; background: var(--sorot); }
+
+.saring { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 0 1.5rem; }
 .kategori { display: flex; flex-wrap: wrap; gap: 0 1.1rem; margin-left: -.1rem; }
-.kategori button {
-  min-height: 44px; padding: 0 .1rem; border: 0; background: none; color: var(--redup);
-  font: inherit; cursor: pointer;
-}
+.kategori button { min-height: 44px; padding: 0 .1rem; border: 0; background: none; color: var(--redup); font: inherit; cursor: pointer; }
 .kategori button:hover { color: var(--tinta); }
 .kategori button[aria-pressed="true"] { color: var(--tinta); text-decoration: underline; text-underline-offset: .35em; text-decoration-thickness: 1.5px; }
-.jumlah { margin: 0; color: var(--redup); font-size: .9375rem; font-variant-numeric: tabular-nums; }
-
-.contoh { margin: 1.25rem 0 0; padding: .5rem .75rem; background: var(--sorot); font-size: .9375rem; }
+.jumlah { margin: 0; min-height: 44px; display: flex; align-items: center; color: var(--redup); font-size: .9375rem; font-variant-numeric: tabular-nums; }
+.judul-lain { margin: 0 0 .25rem; font: 400 1.5rem/1.2 var(--serif); }
 
 .rak {
-  list-style: none; margin: clamp(1.5rem, 4vw, 2.75rem) 0 0; padding: 0;
+  list-style: none; margin: 1.25rem 0 0; padding: 0;
   display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: clamp(2rem, 5vw, 3.5rem) clamp(.875rem, 2.5vw, 2rem);
 }
 @media (min-width: 48rem) { .rak { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
 @media (min-width: 68rem) { .rak { grid-template-columns: repeat(4, minmax(0, 1fr)); } }
+.rak li { min-width: 0; }
 
-.kartu { display: flex; flex-direction: column; height: 100%; text-decoration: none; }
+.kartu { display: flex; flex-direction: column; height: 100%; }
+.kartu-isi { display: flex; flex-direction: column; flex: 1; text-decoration: none; }
 .bingkai { position: relative; display: block; aspect-ratio: 4 / 5; overflow: hidden; background: var(--bingkai); isolation: isolate; }
 /* Multiply melebur latar putih foto Shopee ke warna bingkai. */
 .bingkai img { display: block; width: 100%; height: 100%; object-fit: cover; mix-blend-mode: multiply; transition: transform .35s ease; }
-.kartu:hover .bingkai img { transform: scale(1.035); }
-.nomor { position: absolute; top: .3rem; left: .6rem; color: var(--tinta-foto); font: 400 clamp(2rem, 6vw, 3rem)/1.1 var(--serif); font-variant-numeric: lining-nums; }
-.nama { margin-top: .75rem; font-weight: 500; line-height: 1.3; }
+a:hover > .bingkai img { transform: scale(1.035); }
+/* Nomor punya latar sendiri supaya tetap terbaca di atas foto apa pun. */
+.nomor { position: absolute; top: 0; left: 0; padding: .1rem .55rem .15rem; background: var(--putih); color: var(--burgundy); font: 500 clamp(1.5rem, 4.5vw, 2.25rem)/1.15 var(--serif); font-variant-numeric: lining-nums; }
+.favorit { position: absolute; top: .6rem; right: .6rem; padding: .1rem .5rem; background: var(--champagne); color: var(--burgundy); font-size: .8125rem; font-weight: 500; }
+.nama { margin-top: .75rem; font-weight: 500; line-height: 1.3; overflow-wrap: anywhere; }
 .catatan { margin-top: .2rem; color: var(--redup); font-size: .9375rem; line-height: 1.4; }
-.baris { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 0 .75rem; margin-top: auto; padding-top: .5rem; font-size: .9375rem; }
-.harga { font-variant-numeric: tabular-nums; }
-.aksi { text-decoration: underline; text-underline-offset: .25em; }
-
-.pesan { margin-top: 2.5rem; max-width: 32rem; }
-.pesan p { margin: 0 0 .75rem; }
-.pesan button {
-  min-height: 44px; padding: 0 1.1rem; border: 1.5px solid var(--tinta); border-radius: 0;
-  background: none; color: inherit; font: inherit; cursor: pointer;
+.harga { display: block; margin-top: .35rem; font-variant-numeric: tabular-nums; }
+.tombol {
+  display: flex; align-items: center; justify-content: center; width: 100%; min-height: 44px; margin-top: .75rem; padding: .4rem .5rem;
+  background: var(--tombol); color: var(--tombol-teks); font-weight: 500; font-size: .9375rem; line-height: 1.2; text-align: center; text-decoration: none;
 }
+.tombol:hover { opacity: .9; }
+.video { display: inline-flex; align-items: center; min-height: 40px; color: var(--redup); font-size: .9375rem; text-underline-offset: .25em; }
+
+.pesan { margin-top: 2rem; max-width: 32rem; }
+.pesan p { margin: 0 0 .75rem; }
+.pesan button { min-height: 44px; padding: 0 1.1rem; border: 1.5px solid var(--tombol); border-radius: 0; background: none; color: inherit; font: inherit; cursor: pointer; }
 
 .kaki { margin-top: clamp(3rem, 8vw, 5.5rem); padding-top: 1.25rem; border-top: 1px solid var(--garis); color: var(--redup); font-size: .9375rem; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem 3rem; }
 .kaki p { margin: 0; max-width: 38rem; }
 .sosmed { display: flex; flex-wrap: wrap; gap: 0 1.25rem; }
 .sosmed a { display: inline-flex; align-items: center; min-height: 44px; }
 
-@media (prefers-reduced-motion: reduce) { .bingkai img { transition: none; } .kartu:hover .bingkai img { transform: none; } }
+@media (prefers-reduced-motion: reduce) { .bingkai img { transition: none; } a:hover > .bingkai img { transform: none; } }
 </style>
 </head>
 <body>
-<div class="halaman">
-  <header class="kepala">
+<header class="pita">
+  <div class="lebar">
     <h1>sabilaamarav</h1>
-    <p>Semua barang dari videoku, ada di sini.</p>
-  </header>
+    <p id="tagline">Semua barang dari videoku, ada di sini.</p>
+    <label class="cari">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.8-3.8"/></svg>
+      <input id="cari" type="search" autocomplete="off" enterkeyhint="search" aria-label="Cari nomor atau nama barang" placeholder="Cari nomor atau nama barang">
+      <button class="bersihkan" id="bersihkan" type="button" aria-label="Hapus pencarian" hidden>&times;</button>
+    </label>
+  </div>
+</header>
 
-  <section class="pencari" aria-label="Cari barang">
-    <label for="cari">Ketik nomor dari video, atau nama barangnya</label>
-    <div class="kolom">
-      <span aria-hidden="true">no.</span>
-      <input id="cari" type="text" autocomplete="off" enterkeyhint="search" placeholder="47">
-    </div>
+<div class="lebar isi">
+  <main>
+    <p class="belum" id="belum" hidden></p>
+    <section class="sorotan" id="sorotan" hidden></section>
+    <h2 class="judul-lain" id="judul-lain" hidden>Barang lainnya</h2>
     <div class="saring">
       <div class="kategori" id="kategori" role="group" aria-label="Pilih kategori"></div>
       <p class="jumlah" id="jumlah" role="status"></p>
     </div>
-    <p class="contoh" id="contoh" hidden>Ini contoh tampilan. Barang, harga, dan gambarnya belum sungguhan.</p>
-  </section>
-
-  <main>
     <ul class="rak" id="rak"></ul>
     <div class="pesan" id="pesan" hidden></div>
   </main>
@@ -161,18 +176,11 @@ a { color: inherit; }
 </div>
 
 <script>
-/* ===== Yang boleh diubah ===== */
-// Kosongkan link yang tidak dipakai.
-const SOSMED = [
-  { nama: "TikTok", link: "" },
-  { nama: "Instagram", link: "" },
-];
-/* ============================= */
-
 const el = (id) => document.getElementById(id);
 const SEMUA = "Semua";
 let barang = [];
 let kategoriAktif = SEMUA;
+let nomorSorot = null;
 
 // Hanya alamat http(s) yang boleh jadi link.
 function alamatAman(nilai, bolehRelatif) {
@@ -185,17 +193,20 @@ function alamatAman(nilai, bolehRelatif) {
 
 function rapikan(baris) {
   return baris
+    .filter((b) => !b.sembunyi)
     .map((b) => ({
       nomor: parseInt(b.nomor, 10),
       nama: b.nama,
       kategori: b.kategori,
       harga: b.harga,
       catatan: b.catatan,
+      favorit: b.favorit === true,
       foto: alamatAman(b.foto, true),
       link: alamatAman(b.link, false),
+      video: alamatAman(b.video, false),
     }))
     .filter((b) => b.nama && b.link && Number.isInteger(b.nomor))
-    .sort((a, b) => b.nomor - a.nomor);
+    .sort((a, b) => Number(b.favorit) - Number(a.favorit) || b.nomor - a.nomor);
 }
 
 function nomorDicari(q) {
@@ -203,121 +214,152 @@ function nomorDicari(q) {
   return m ? parseInt(m[1], 10) : null;
 }
 
-function buatKartu(b) {
-  const span = (kelas, teks) => {
-    const s = document.createElement("span");
-    s.className = kelas;
-    s.textContent = teks;
-    return s;
-  };
-  const li = document.createElement("li");
-  const a = document.createElement("a");
-  a.className = "kartu";
-  a.href = b.link;
-  a.target = "_blank";
-  a.rel = "sponsored noopener";
-  a.setAttribute("aria-label", `Nomor ${b.nomor}, ${b.nama}. Lihat di Shopee`);
+function buat(tag, kelas, teks) {
+  const e = document.createElement(tag);
+  if (kelas) e.className = kelas;
+  if (teks !== undefined) e.textContent = teks;
+  return e;
+}
 
-  const bingkai = span("bingkai", "");
+function linkKeluar(tag, kelas, href, teks, rel) {
+  const a = buat(tag, kelas, teks);
+  a.href = href;
+  a.target = "_blank";
+  a.rel = rel;
+  return a;
+}
+
+function buatBingkai(b) {
+  const bingkai = buat("span", "bingkai");
   if (b.foto) {
     const img = document.createElement("img");
     img.src = b.foto;
     img.alt = "";
     img.loading = "lazy";
     img.decoding = "async";
-    img.referrerPolicy = "no-referrer";
     img.onerror = () => { img.hidden = true; };
     bingkai.append(img);
   }
-  bingkai.append(span("nomor", b.nomor));
-  a.append(bingkai, span("nama", b.nama));
-  if (b.catatan) a.append(span("catatan", b.catatan));
+  bingkai.append(buat("span", "nomor", b.nomor));
+  if (b.favorit) bingkai.append(buat("span", "favorit", "Favorit"));
+  return bingkai;
+}
 
-  const baris = span("baris", "");
-  baris.append(span("harga", b.harga), span("aksi", "Lihat di Shopee"));
-  a.append(baris);
-  li.append(a);
+function buatKartu(b) {
+  const li = document.createElement("li");
+  const kartu = buat("article", "kartu");
+  const isi = linkKeluar("a", "kartu-isi", b.link, undefined, "sponsored noopener");
+  isi.setAttribute("aria-label", `Nomor ${b.nomor}, ${b.nama}`);
+  isi.append(buatBingkai(b), buat("span", "nama", b.nama));
+  if (b.catatan) isi.append(buat("span", "catatan", b.catatan));
+  if (b.harga) isi.append(buat("span", "harga", b.harga));
+  kartu.append(isi, linkKeluar("a", "tombol", b.link, "Lihat di Shopee", "sponsored noopener"));
+  if (b.video) kartu.append(linkKeluar("a", "video", b.video, "Tonton review", "noopener"));
+  li.append(kartu);
   return li;
+}
+
+function isiSorotan(b) {
+  const foto = linkKeluar("a", "", b.link, undefined, "sponsored noopener");
+  foto.setAttribute("aria-label", `Nomor ${b.nomor}, ${b.nama}`);
+  foto.append(buatBingkai(b));
+  const teks = document.createElement("div");
+  teks.append(buat("h2", "", b.nama));
+  if (b.catatan) teks.append(buat("p", "", b.catatan));
+  if (b.harga) teks.append(buat("span", "harga", b.harga));
+  teks.append(linkKeluar("a", "tombol", b.link, "Lihat di Shopee", "sponsored noopener"));
+  if (b.video) teks.append(linkKeluar("a", "video", b.video, "Tonton review", "noopener"));
+  el("sorotan").replaceChildren(foto, teks);
+}
+
+function cocok(b, q, nomor) {
+  const teks = `${b.nama} ${b.kategori || ""} ${b.catatan || ""}`.toLowerCase();
+  if (nomor !== null) return b.nomor === nomor || teks.includes(String(nomor));
+  return q.toLowerCase().split(/\s+/).every((kata) => teks.includes(kata));
 }
 
 function tampilkan() {
   const q = el("cari").value.trim();
   const nomor = nomorDicari(q);
-  el("cari").classList.toggle("kata", q !== "" && nomor === null);
+  el("bersihkan").hidden = !el("cari").value;
 
-  const hasil = barang.filter((b) => {
-    if (kategoriAktif !== SEMUA && b.kategori !== kategoriAktif) return false;
-    if (!q) return true;
-    if (nomor !== null) return b.nomor === nomor;
-    return `${b.nama} ${b.kategori}`.toLowerCase().includes(q.toLowerCase());
-  });
+  const bebas = !q && kategoriAktif === SEMUA;
+  const sorotan = bebas && nomorSorot !== null ? barang.find((b) => b.nomor === nomorSorot) : null;
+  el("sorotan").hidden = !sorotan;
+  if (sorotan) isiSorotan(sorotan);
+  el("belum").hidden = !(bebas && nomorSorot !== null && !sorotan);
+  el("belum").textContent = `Nomor ${nomorSorot} belum ada di sini. Cek lagi nomornya di video, atau cari barangnya di atas.`;
 
+  const hasil = barang
+    .filter((b) => b !== sorotan)
+    .filter((b) => kategoriAktif === SEMUA || b.kategori === kategoriAktif)
+    .filter((b) => !q || cocok(b, q, nomor))
+    .sort((a, b) => Number(b.nomor === nomor) - Number(a.nomor === nomor));
+
+  el("judul-lain").hidden = !(sorotan && hasil.length);
   el("rak").replaceChildren(...hasil.map(buatKartu));
   el("jumlah").textContent = `${hasil.length} barang`;
 
   const pesan = el("pesan");
-  pesan.hidden = hasil.length > 0;
-  if (!hasil.length) {
-    const teks = document.createElement("p");
-    teks.textContent = nomor !== null
-      ? `Nomor ${nomor} belum ada di sini. Cek lagi nomornya di video.`
-      : `Belum ada barang yang cocok dengan “${q}”.`;
-    const tombol = document.createElement("button");
-    tombol.type = "button";
-    tombol.textContent = "Lihat semua barang";
-    tombol.onclick = () => {
-      el("cari").value = "";
-      kategoriAktif = SEMUA;
-      buatKategori();
-      tampilkan();
-    };
-    pesan.replaceChildren(teks, tombol);
+  pesan.hidden = hasil.length > 0 || Boolean(sorotan);
+  if (pesan.hidden) return;
+  if (!barang.length) {
+    pesan.replaceChildren(buat("p", "", "Barang pertama segera tampil di sini."));
+    return;
   }
+  const tombol = buat("button", "", "Lihat semua barang");
+  tombol.type = "button";
+  tombol.onclick = () => {
+    el("cari").value = "";
+    kategoriAktif = SEMUA;
+    buatKategori();
+    tampilkan();
+  };
+  pesan.replaceChildren(buat("p", "", q ? `Belum ada barang yang cocok dengan “${q}”.` : "Belum ada barang di kategori ini."), tombol);
 }
 
 function buatKategori() {
   const daftar = [SEMUA, ...new Set(barang.map((b) => b.kategori).filter(Boolean))];
   el("kategori").replaceChildren(...daftar.map((nama) => {
-    const t = document.createElement("button");
+    const t = buat("button", "", nama);
     t.type = "button";
-    t.textContent = nama;
     t.setAttribute("aria-pressed", String(nama === kategoriAktif));
     t.onclick = () => { kategoriAktif = nama; buatKategori(); tampilkan(); };
     return t;
   }));
 }
 
-// Link seperti situsku.com/#47 langsung membuka barang nomor 47.
+// Link seperti sabilaamarav.github.io/#47 menampilkan barang nomor 47 paling atas.
 function bacaAlamat() {
   const nomor = location.hash.slice(1);
-  if (/^\d+$/.test(nomor)) el("cari").value = nomor;
+  nomorSorot = /^\d+$/.test(nomor) ? parseInt(nomor, 10) : null;
+}
+
+function terapkanPengaturan(atur) {
+  if (atur.tagline) el("tagline").textContent = atur.tagline;
+  el("sosmed").replaceChildren(...[["TikTok", atur.tiktok], ["Instagram", atur.instagram]].flatMap(([nama, link]) => {
+    const alamat = alamatAman(link, false);
+    return alamat ? [linkKeluar("a", "", alamat, nama, "noopener")] : [];
+  }));
 }
 
 function tampilkanGagal() {
   el("jumlah").textContent = "";
-  const teks = document.createElement("p");
-  teks.textContent = "Daftar barang belum bisa dimuat. Cek koneksi internet, lalu muat ulang halaman ini.";
-  const tombol = document.createElement("button");
+  const tombol = buat("button", "", "Muat ulang");
   tombol.type = "button";
-  tombol.textContent = "Muat ulang";
   tombol.onclick = () => location.reload();
-  el("pesan").replaceChildren(teks, tombol);
+  el("pesan").replaceChildren(buat("p", "", "Daftar barang belum bisa dimuat. Cek koneksi internet, lalu muat ulang halaman ini."), tombol);
   el("pesan").hidden = false;
 }
 
 async function mulai() {
-  el("sosmed").replaceChildren(...SOSMED.flatMap((s) => {
-    const link = alamatAman(s.link, false);
-    if (!link) return [];
-    const a = document.createElement("a");
-    a.href = link;
-    a.target = "_blank";
-    a.rel = "noopener";
-    a.textContent = s.nama;
-    return [a];
-  }));
   bacaAlamat();
   el("cari").addEventListener("input", tampilkan);
+  el("bersihkan").addEventListener("click", () => {
+    el("cari").value = "";
+    el("cari").focus();
+    tampilkan();
+  });
   window.addEventListener("hashchange", () => { bacaAlamat(); tampilkan(); });
 
   el("jumlah").textContent = "Memuat barang…";
@@ -326,7 +368,7 @@ async function mulai() {
     if (!r.ok) throw new Error(r.status);
     const data = await r.json();
     barang = rapikan(data.barang);
-    el("contoh").hidden = !data.contoh;
+    terapkanPengaturan(data.pengaturan || {});
   } catch {
     tampilkanGagal();
     return;
