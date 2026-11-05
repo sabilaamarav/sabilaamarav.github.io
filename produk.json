@@ -1,13 +1,14 @@
 {
-  "contoh": true,
+  "contoh": false,
   "barang": [
-    { "nomor": 47, "nama": "Botol minum stainless 600 ml", "kategori": "Dapur", "harga": "Rp89.000", "catatan": "Dingin tahan seharian, muat di tas kecil", "foto": "foto/botol-minum.jpg", "link": "https://shopee.co.id/" },
-    { "nomor": 46, "nama": "Mug keramik gagang lebar", "kategori": "Dapur", "harga": "Rp45.000", "catatan": "Warnanya kalem dan tebal", "foto": "foto/mug-keramik.jpg", "link": "https://shopee.co.id/" },
-    { "nomor": 45, "nama": "Lilin aroma linen", "kategori": "Rumah", "harga": "Rp62.000", "catatan": "Wanginya halus, tidak bikin pusing", "foto": "foto/lilin-aroma.jpg", "link": "https://shopee.co.id/" },
-    { "nomor": 44, "nama": "Tote bag kanvas tebal", "kategori": "Fashion", "harga": "Rp55.000", "catatan": "Muat laptop 14 inci", "foto": "foto/tote-kanvas.jpg", "link": "https://shopee.co.id/" },
-    { "nomor": 43, "nama": "Lampu meja kap kain", "kategori": "Rumah", "harga": "Rp129.000", "catatan": "Cahayanya hangat untuk malam", "foto": "foto/lampu-meja.jpg", "link": "https://shopee.co.id/" },
-    { "nomor": 42, "nama": "Serum wajah niacinamide", "kategori": "Cantik", "harga": "Rp74.000", "catatan": "Cepat meresap", "foto": "foto/serum-wajah.jpg", "link": "https://shopee.co.id/" },
-    { "nomor": 41, "nama": "Buku catatan polos A5", "kategori": "Meja kerja", "harga": "Rp38.000", "catatan": "Kertasnya tidak tembus pulpen", "foto": "foto/buku-catatan.jpg", "link": "https://shopee.co.id/" },
-    { "nomor": 40, "nama": "Vas keramik bulat", "kategori": "Rumah", "harga": "Rp68.000", "catatan": "Cantik walau tanpa bunga", "foto": "foto/vas-bunga.jpg", "link": "https://shopee.co.id/" }
+    {
+      "nomor": 1,
+      "nama": "Mils Magnetic Slim Case",
+      "link": "https://s.shopee.co.id/3B8keGBCBX",
+      "foto": "foto/1-1793905353318.jpg",
+      "kategori": "",
+      "harga": "",
+      "catatan": ""
+    }
   ]
 }
